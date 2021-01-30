@@ -1,7 +1,15 @@
 import { writable, derived } from "svelte/store";
 
-type Book = {
+export type Book = {
   id: string;
+  volumeInfo: {
+    title: string;
+    authors: string[];
+    imageLinks?: {
+      smallThumbnail?: string;
+      thumbnail?: string;
+    };
+  };
 };
 
 type State = {
@@ -17,6 +25,8 @@ const state = writable<State>({
 });
 
 // readonly で export
+export const totalItems = derived(state, (v) => v.totalItems);
+export const books = derived(state, (v) => v.books);
 export const fetching = derived(state, (v) => v.fetching);
 
 export const fetchBooks = async (keyword: string): Promise<void> => {
@@ -26,11 +36,12 @@ export const fetchBooks = async (keyword: string): Promise<void> => {
   }));
 
   const res = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=${keyword}`
+    `https://www.googleapis.com/books/v1/volumes?q=${keyword}&maxResults=20`
   ).then((data) => data.json());
 
   state.set({
-    ...res,
+    totalItems: res.totalItems,
+    books: res.items,
     fetching: false,
   });
 };

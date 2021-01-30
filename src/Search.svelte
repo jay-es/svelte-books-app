@@ -2,7 +2,7 @@
   import { Search, Form } from "carbon-components-svelte";
   import { fetchBooks, fetching } from "./store";
 
-  export let keyword: string;
+  let keyword: string;
   $: disabled = $fetching;
 
   const handleSubmit = async () => {
