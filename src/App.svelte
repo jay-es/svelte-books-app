@@ -1,13 +1,13 @@
 <script lang="ts">
   import { Header, Content } from "carbon-components-svelte";
-  export let name: string;
+  import Search from "./Search.svelte";
 </script>
 
 <main>
   <Header company="Books" />
 
   <Content>
-    <h1>Hello {name}!</h1>
+    <Search />
     <p>
       Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
       how to build Svelte apps.
