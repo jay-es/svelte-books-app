@@ -6,13 +6,16 @@
   $: author = book.volumeInfo.authors?.join() ?? "";
   $: thumbnail =
     book.volumeInfo.imageLinks?.thumbnail ??
-    book.volumeInfo.imageLinks?.smallThumbnail ??
-    "http://design-ec.com/d/e_others_50/m_e_others_500.png";
+    book.volumeInfo.imageLinks?.smallThumbnail;
 </script>
 
 <article>
   <div class="image">
-    <img src={thumbnail} alt="thumbnail" class="thumbnail" />
+    {#if thumbnail}
+      <img src={thumbnail} alt="thumbnail" class="thumbnail" />
+    {:else}
+      <p class="no-image">no image</p>
+    {/if}
   </div>
   <div class="title">{title}</div>
   <div class="author">{author}</div>
@@ -27,7 +30,6 @@
   }
   .image {
     margin-bottom: 10px;
-    width: 100%;
     height: 120px;
     text-align: center;
   }
@@ -36,6 +38,11 @@
     height: auto;
     max-width: 100%;
     max-height: 100%;
+  }
+  .no-image {
+    line-height: 120px;
+    opacity: 0.33;
+    font-weight: 600;
   }
   .title {
     margin-bottom: 10px;
