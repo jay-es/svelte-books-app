@@ -1,19 +1,23 @@
 <script lang="ts">
   import { Search, Form } from "carbon-components-svelte";
-  import { fetchBooks, fetching } from "./store";
+  import { fetchBooks, formData } from "./store";
 
-  let keyword: string;
-  $: disabled = $fetching;
+  let input: HTMLInputElement;
 
   const handleSubmit = async () => {
+    const keyword = input.value;
+
     // 空なら終了
     if (!keyword) return;
 
-    await fetchBooks(keyword);
-    keyword = "";
+    await fetchBooks({ keyword, page: 0 });
   };
 </script>
 
 <Form on:submit={handleSubmit}>
-  <Search bind:value={keyword} bind:disabled />
+  <Search
+    bind:ref={input}
+    value={$formData.keyword}
+    disabled={$formData.fetching}
+  />
 </Form>

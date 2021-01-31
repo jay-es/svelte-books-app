@@ -1,4 +1,4 @@
-import { writable, derived } from "svelte/store";
+import { writable, derived, get } from "svelte/store";
 
 export type Book = {
   id: string;
@@ -12,36 +12,55 @@ export type Book = {
   };
 };
 
-type State = {
+type SearchResult = {
   totalItems: number;
-  books: Book[];
+  items: Book[];
+};
+const result = writable<SearchResult>({
+  totalItems: 0,
+  items: [],
+});
+
+type SearchParams = {
+  keyword: string;
+  page: number;
+  pageSize: number;
+};
+type SearchState = SearchParams & {
   fetching: boolean;
 };
-
-const state = writable<State>({
-  totalItems: 0,
-  books: [],
+const searchState = writable<SearchState>({
   fetching: false,
+  keyword: "",
+  page: 0,
+  pageSize: 20,
 });
 
 // readonly で export
-export const totalItems = derived(state, (v) => v.totalItems);
-export const books = derived(state, (v) => v.books);
-export const fetching = derived(state, (v) => v.fetching);
+export const totalItems = derived(result, (v) => v.totalItems);
+export const books = derived(result, (v) => v.items);
+export const formData = derived(searchState, (v) => v);
 
-export const fetchBooks = async (keyword: string): Promise<void> => {
-  state.update((value) => ({
+export const fetchBooks = async (
+  params: Partial<SearchParams>
+): Promise<void> => {
+  searchState.update((value) => ({
     ...value,
+    ...params,
     fetching: true,
   }));
 
+  const { keyword, page, pageSize } = get(searchState);
   const res = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=${keyword}&maxResults=20`
+    "https://www.googleapis.com/books/v1/volumes" +
+      `?q=${keyword}&maxResults=${pageSize}&startIndex=${page * pageSize}`
   ).then((data) => data.json());
 
-  state.set({
-    totalItems: res.totalItems,
-    books: res.items,
+  searchState.update((value) => ({
+    ...value,
     fetching: false,
-  });
+  }));
+
+  if (!res.items) return;
+  result.set(res);
 };
