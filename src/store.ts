@@ -51,7 +51,7 @@ export const fetchBooks = async (
   }));
 
   const { keyword, page, pageSize } = get(searchState);
-  const res = await fetch(
+  const res: Partial<SearchResult> = await fetch(
     "https://www.googleapis.com/books/v1/volumes" +
       `?q=${keyword}&maxResults=${pageSize}&startIndex=${page * pageSize}`
   ).then((data) => data.json());
@@ -61,6 +61,9 @@ export const fetchBooks = async (
     fetching: false,
   }));
 
-  if (!res.items) return;
-  result.set(res);
+  // ありえないページの場合 items がない、エラーの場合は totalItems もない
+  result.set({
+    totalItems: res.totalItems ?? 0,
+    items: res.items ?? [],
+  });
 };

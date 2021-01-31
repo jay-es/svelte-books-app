@@ -23,7 +23,9 @@
 
   {#if total > 0}
     <PaginationNav {page} {shown} {total} on:change={handlePageChange} />
+  {/if}
 
+  {#if $books.length}
     <ul class="booklist">
       {#each $books as book (book.id)}
         <li class="booklist-item">
