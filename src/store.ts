@@ -12,58 +12,54 @@ export type Book = {
   };
 };
 
-type SearchResult = {
+type Result = {
   totalItems: number;
   items: Book[];
 };
-const result = writable<SearchResult>({
-  totalItems: 0,
-  items: [],
-});
-
-type SearchParams = {
+type Params = {
   keyword: string;
   page: number;
   pageSize: number;
 };
-type SearchState = SearchParams & {
+type Store = Result & {
   fetching: boolean;
+  params: Params;
 };
-const searchState = writable<SearchState>({
+
+const store = writable<Store>({
+  totalItems: 0,
+  items: [],
   fetching: false,
-  keyword: "",
-  page: 0,
-  pageSize: 20,
+  params: {
+    keyword: "",
+    page: 0,
+    pageSize: 20,
+  },
 });
 
-// readonly で export
-export const totalItems = derived(result, (v) => v.totalItems);
-export const books = derived(result, (v) => v.items);
-export const formData = derived(searchState, (v) => v);
-
-export const fetchBooks = async (
-  params: Partial<SearchParams>
-): Promise<void> => {
-  searchState.update((value) => ({
+export const fetchBooks = async (params: Partial<Params>): Promise<void> => {
+  store.update((value) => ({
     ...value,
-    ...params,
     fetching: true,
+    params: { ...value.params, ...params },
   }));
 
-  const { keyword, page, pageSize } = get(searchState);
-  const res: Partial<SearchResult> = await fetch(
+  const { keyword, page, pageSize } = get(store).params;
+  const res: Partial<Result> = await fetch(
     "https://www.googleapis.com/books/v1/volumes" +
       `?q=${keyword}&maxResults=${pageSize}&startIndex=${page * pageSize}`
   ).then((data) => data.json());
 
-  searchState.update((value) => ({
+  store.update((value) => ({
     ...value,
+    totalItems: res.totalItems ?? 0, // エラーだとない
+    items: res.items ?? [], // 存在しないページ番号だとない
     fetching: false,
   }));
-
-  // ありえないページの場合 items がない、エラーの場合は totalItems もない
-  result.set({
-    totalItems: res.totalItems ?? 0,
-    items: res.items ?? [],
-  });
 };
+
+// readonly で export
+export const totalItems = derived(store, (v) => v.totalItems);
+export const books = derived(store, (v) => v.items);
+export const params = derived(store, (v) => v.params);
+export const fetching = derived(store, (v) => v.fetching);

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { PaginationNav } from "carbon-components-svelte";
-  import { totalItems, books, formData, fetchBooks } from "./store";
+  import { totalItems, books, params, fetchBooks } from "./store";
   import BookListItem from "./BookListItem.svelte";
 
   let offsetWidth;
@@ -13,9 +13,9 @@
     fetchBooks(event.detail);
   };
 
-  $: page = $formData.page;
+  $: page = $params.page;
   $: shown = Math.floor(offsetWidth / 48) - 2;
-  $: total = Math.ceil($totalItems / $formData.pageSize);
+  $: total = Math.ceil($totalItems / $params.pageSize);
 </script>
 
 <div bind:offsetWidth>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Search, Form } from "carbon-components-svelte";
-  import { fetchBooks, formData } from "./store";
+  import { fetchBooks, fetching, params } from "./store";
 
   let input: HTMLInputElement;
 
@@ -15,9 +15,5 @@
 </script>
 
 <Form on:submit={handleSubmit}>
-  <Search
-    bind:ref={input}
-    value={$formData.keyword}
-    disabled={$formData.fetching}
-  />
+  <Search bind:ref={input} value={$params.keyword} disabled={$fetching} />
 </Form>
