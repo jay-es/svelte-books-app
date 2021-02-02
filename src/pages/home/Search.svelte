@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Search, Form } from "carbon-components-svelte";
-  import { fetchBooks, fetching, params } from "./store";
+  import { fetchBooks, fetching, params } from "../../stores/search";
 
   let input: HTMLInputElement;
 

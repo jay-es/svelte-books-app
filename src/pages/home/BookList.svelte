@@ -1,6 +1,6 @@
 <script lang="ts">
   import { PaginationNav } from "carbon-components-svelte";
-  import { totalItems, books, params, fetchBooks } from "./store";
+  import { totalItems, books, params, fetchBooks } from "../../stores/search";
   import BookListItem from "./BookListItem.svelte";
 
   let offsetWidth;

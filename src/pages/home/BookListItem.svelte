@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Book } from "./store";
+  import type { Book } from "../../stores/search";
   export let book: Book;
 
   $: title = book.volumeInfo.title;

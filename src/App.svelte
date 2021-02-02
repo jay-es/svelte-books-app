@@ -1,30 +1,18 @@
 <script lang="ts">
   import { Header, Content } from "carbon-components-svelte";
-  import Search from "./Search.svelte";
-  import BookList from "./BookList.svelte";
+  import Router from "svelte-spa-router";
+  import type { RouteDefinition } from "svelte-spa-router";
+  import Home from "./pages/home/Index.svelte";
+
+  const routes: RouteDefinition = {
+    "/": Home,
+  };
 </script>
 
 <main>
   <Header company="Books" />
 
   <Content>
-    <section>
-      <Search />
-    </section>
-
-    <section>
-      <BookList />
-    </section>
+    <Router {routes} />
   </Content>
 </main>
-
-<style>
-  section {
-    max-width: 1200px;
-    margin-right: auto;
-    margin-left: auto;
-  }
-  section ~ section {
-    margin-top: 1rem;
-  }
-</style>
