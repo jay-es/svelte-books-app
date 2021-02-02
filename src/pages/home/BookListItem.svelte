@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { push } from "svelte-spa-router";
   import type { Book } from "../../stores/search";
   export let book: Book;
 
@@ -9,7 +10,7 @@
     book.volumeInfo.imageLinks?.smallThumbnail;
 </script>
 
-<article>
+<article on:click={() => push(`/detail/${book.id}`)}>
   <div class="image">
     {#if thumbnail}
       <img src={thumbnail} alt="thumbnail" class="thumbnail" />
@@ -27,6 +28,7 @@
     padding: 10px;
     background-color: #f4f4f4;
     height: 210px;
+    cursor: pointer;
   }
   .image {
     margin-bottom: 10px;
