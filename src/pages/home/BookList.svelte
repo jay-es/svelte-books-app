@@ -11,6 +11,7 @@
     if (page === event.detail.page) return;
 
     fetchBooks(event.detail);
+    window.scrollTo({ top: 0 });
   };
 
   $: page = $params.page;

@@ -1,13 +1,14 @@
 <script lang="ts">
+  import { fetching } from "../../stores/search";
   import Search from "./Search.svelte";
   import BookList from "./BookList.svelte";
 </script>
 
-<section>
+<section class={$fetching ? "disabled" : ""}>
   <Search />
 </section>
 
-<section>
+<section class={$fetching ? "disabled" : ""}>
   <BookList />
 </section>
 
@@ -19,5 +20,11 @@
   }
   section ~ section {
     margin-top: 1rem;
+  }
+  .disabled {
+    cursor: progress;
+  }
+  .disabled :global(*) {
+    pointer-events: none;
   }
 </style>

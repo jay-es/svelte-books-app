@@ -8,6 +8,6 @@
   <Header company="Book Search App" />
 
   <Content>
-    <Router {routes} />
+    <Router {routes} restoreScrollState />
   </Content>
 </main>
