@@ -1,21 +1,12 @@
 <script lang="ts">
+  import Thumbnail from "../../components/Thumbnail.svelte";
   import type { Book } from "../../stores/search";
   export let book: Book;
   const NO_DATA = "";
-
-  $: thumbnail =
-    book.volumeInfo.imageLinks?.thumbnail ??
-    book.volumeInfo.imageLinks?.smallThumbnail;
 </script>
 
 <article>
-  <div class="image">
-    {#if thumbnail}
-      <img src={thumbnail} alt="thumbnail" class="thumbnail" />
-    {:else}
-      <p class="no-image">no image</p>
-    {/if}
-  </div>
+  <Thumbnail {book} detail />
   <div class="info">
     <dl>
       <dt>Title</dt>
@@ -37,33 +28,6 @@
 </article>
 
 <style>
-  .image {
-    margin-bottom: 10px;
-    max-height: 200px;
-    text-align: center;
-  }
-  @media (min-width: 36rem) {
-    .image {
-      float: left;
-      width: 130px;
-      margin-right: 20px;
-      text-align: initial;
-    }
-  }
-  .thumbnail {
-    border: 1px solid #999;
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100%;
-  }
-  .no-image {
-    background-color: #f4f4f4;
-    text-align: center;
-    line-height: 120px;
-    color: #bbb;
-    font-weight: 600;
-  }
   .info {
     overflow: hidden;
   }

@@ -1,23 +1,15 @@
 <script lang="ts">
   import { push } from "svelte-spa-router";
+  import Thumbnail from "../../components/Thumbnail.svelte";
   import type { Book } from "../../stores/search";
   export let book: Book;
 
   $: title = book.volumeInfo.title;
   $: author = book.volumeInfo.authors?.join() ?? "";
-  $: thumbnail =
-    book.volumeInfo.imageLinks?.thumbnail ??
-    book.volumeInfo.imageLinks?.smallThumbnail;
 </script>
 
 <article on:click={() => push(`/detail/${book.id}`)}>
-  <div class="image">
-    {#if thumbnail}
-      <img src={thumbnail} alt="thumbnail" class="thumbnail" />
-    {:else}
-      <p class="no-image">no image</p>
-    {/if}
-  </div>
+  <Thumbnail {book} />
   <div class="title">{title}</div>
   <div class="author">{author}</div>
 </article>
@@ -29,25 +21,10 @@
     background-color: #f4f4f4;
     height: 210px;
     cursor: pointer;
-  }
-  .image {
-    margin-bottom: 10px;
-    height: 120px;
-    text-align: center;
-  }
-  .thumbnail {
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100%;
-  }
-  .no-image {
-    line-height: 120px;
-    color: #bbb;
-    font-weight: 600;
+    line-height: 1.2;
   }
   .title {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     display: -webkit-box;
     overflow: hidden;
     -webkit-box-orient: vertical;
