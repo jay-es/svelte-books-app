@@ -43,7 +43,7 @@
   }
   .no-image {
     line-height: 120px;
-    opacity: 0.33;
+    color: #bbb;
     font-weight: 600;
   }
   .title {

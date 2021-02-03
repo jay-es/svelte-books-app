@@ -12,7 +12,7 @@
 </script>
 
 <main>
-  <Header company="Books" />
+  <Header company="Book Search App" />
 
   <Content>
     <Router {routes} />

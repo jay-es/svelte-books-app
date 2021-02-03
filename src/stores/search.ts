@@ -4,11 +4,16 @@ export type Book = {
   id: string;
   volumeInfo: {
     title: string;
-    authors: string[];
+    authors?: string[];
     imageLinks?: {
       smallThumbnail?: string;
       thumbnail?: string;
     };
+    publisher?: string;
+    publishedDate?: string;
+    categories?: string[];
+    pageCount?: number;
+    description?: string;
   };
 };
 
