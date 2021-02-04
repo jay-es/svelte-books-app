@@ -28,7 +28,7 @@
 
   {#if $books.length}
     <ul class="booklist">
-      {#each $books as book (book.id)}
+      {#each $books as book}
         <li class="booklist-item">
           <BookListItem {book} />
         </li>

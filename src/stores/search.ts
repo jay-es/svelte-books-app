@@ -28,10 +28,11 @@ export const qModes = [
   { text: "Publisher", value: "inpublisher:" },
   { text: "ISBN", value: "isbn:" },
 ] as const;
+export const orderBys = ["relevance", "newest"] as const;
 
-export type Params = {
+type Params = {
   keyword: string;
-  orderBy: "relevance" | "newest";
+  orderBy: typeof orderBys[number];
   page: number;
   pageSize: number;
   qMode: typeof qModes[number]["value"];
@@ -47,7 +48,7 @@ const store = writable<Store>({
   fetching: false,
   params: {
     keyword: "",
-    orderBy: "relevance",
+    orderBy: orderBys[0],
     page: 0,
     pageSize: 20,
     qMode: qModes[0].value,
