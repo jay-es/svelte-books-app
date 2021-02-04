@@ -21,10 +21,20 @@ type Result = {
   totalItems: number;
   items: Book[];
 };
-type Params = {
+export const qModes = [
+  { text: "Any", value: "" },
+  { text: "Title", value: "intitle:" },
+  { text: "Author", value: "inauthor:" },
+  { text: "Publisher", value: "inpublisher:" },
+  { text: "ISBN", value: "isbn:" },
+] as const;
+
+export type Params = {
   keyword: string;
+  orderBy: "relevance" | "newest";
   page: number;
   pageSize: number;
+  qMode: typeof qModes[number]["value"];
 };
 type Store = Result & {
   fetching: boolean;
@@ -37,10 +47,20 @@ const store = writable<Store>({
   fetching: false,
   params: {
     keyword: "",
+    orderBy: "relevance",
     page: 0,
     pageSize: 20,
+    qMode: qModes[0].value,
   },
 });
+
+type Req = (params: Params) => Promise<Partial<Result>>;
+const request: Req = ({ keyword, orderBy, page, pageSize, qMode }) =>
+  fetch(
+    "https://www.googleapis.com/books/v1/volumes" +
+      `?q=${qMode}${keyword}&orderBy=${orderBy}` +
+      `&maxResults=${pageSize}&startIndex=${page * pageSize}`
+  ).then((data) => data.json());
 
 export const fetchBooks = async (params: Partial<Params>): Promise<void> => {
   store.update((value) => ({
@@ -49,11 +69,7 @@ export const fetchBooks = async (params: Partial<Params>): Promise<void> => {
     params: { ...value.params, ...params },
   }));
 
-  const { keyword, page, pageSize } = get(store).params;
-  const res: Partial<Result> = await fetch(
-    "https://www.googleapis.com/books/v1/volumes" +
-      `?q=${keyword}&maxResults=${pageSize}&startIndex=${page * pageSize}`
-  ).then((data) => data.json());
+  const res = await request(get(store).params);
 
   store.update((value) => ({
     ...value,
