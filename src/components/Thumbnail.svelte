@@ -41,9 +41,7 @@
     height: auto;
     max-width: 100%;
     max-height: 100%;
-  }
-  .detail > .thumbnail {
-    border: 1px solid #999;
+    border: 1px solid #ddd;
   }
 
   .no-image {
