@@ -78,7 +78,20 @@ export const fetchBooks = async (params: Partial<Params>): Promise<void> => {
     items: res.items ?? [], // 存在しないページ番号だとない
     fetching: false,
   }));
+
+  if (process.env.isDev) {
+    // ストレージに保存
+    sessionStorage.setItem("SEARCH", JSON.stringify(get(store)));
+  }
 };
+
+if (process.env.isDev) {
+  // ストレージから復元
+  store.update((value) => ({
+    ...value,
+    ...JSON.parse(sessionStorage.getItem("SEARCH")),
+  }));
+}
 
 // readonly で export
 export const totalItems = derived(store, (v) => v.totalItems);
