@@ -31,7 +31,7 @@
     // 空なら終了
     if (!keyword) return;
 
-    await fetchBooks({ keyword, page: 0 });
+    await fetchBooks({ keyword, orderBy, qMode, page: 0 });
   };
 
   const handleChange = (event: CustomEvent<string>) => {
@@ -39,7 +39,7 @@
     if (event.detail === $params.orderBy || event.detail === $params.qMode)
       return;
 
-    fetchBooks({ orderBy, qMode, page: 0 });
+    handleSubmit();
   };
 </script>
 
