@@ -3,7 +3,7 @@
   import { totalItems, books, params, fetchBooks } from "../../stores/search";
   import BookListItem from "./BookListItem.svelte";
 
-  let offsetWidth;
+  let offsetWidth: number;
   const emptyItems = Array(8); // 最大列数
 
   const handlePageChange = (event: CustomEvent<{ page: number }>): void => {
